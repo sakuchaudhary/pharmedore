@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+  <style>
+    .card_container:hover{
+      transform: scale(1.1);
+      transition: all .4s ease-in-out;
+    }
+  </style>
+</head>
+
+<body style="background-color:#e5e8e8 ;">
+
+    <nav class="navbar navbar-expand-md  navbar-light">
+            <img src="./images/logo1.png" width="175px" height="175px">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+              <ul class="navbar-nav">
+                <li>
+                  <h2 class="display-3">Pharmedore</h2>
+                  <p>One stop pharmacy and medical store!</p>
+                </li>
+              </ul>
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link btn btn-success mr-2 mb-2" style="width:75px;border-radius: 8px;color: black;font-weight: bold;" href="login.html">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link btn btn-danger mr-2" style="width:75px;border-radius: 8px;color: black;font-weight: bold;" href="signup.html">SignUp</a>
+                </li>
+              </ul>
+            </div>  
+          </nav>
+
+<div class="card-deck " style="margin:15px;">
+        <div class="card shadow card_container">
+          <img class="card-img-top" src="./images/expert.png" height="350px" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title" >Expert Advice</h5>
+            <p class="card-text">Chat with the best health experts,they provide you with the best of the health advice.</p>
+            <a href="#" class="btn btn-primary" style="margin-left: 30%;"><h7>Talk to expert</h7></a>
+          </div>
+        </div>
+        <div class="card shadow card_container">
+            <img class="card-img-top" src="./images/blood.png" height="350px" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Blood Bank</h5>
+              <p class="card-text">Visit here to donate a unit and/or request a unit. We have donors willing to donate for a good.</p>
+              <a href="#" class="btn btn-primary" style="margin-left: 35%;"><h7>Save Life</h7></a>
+            </div>
+          </div>        
+        <div class="card shadow card_container">
+          <img class="card-img-top" src="./images/store.png" height="350px" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Medicine Store</h5>
+            <p class="card-text">Visit our online medical store for readily available medicinal stocks for drugs.</p>
+            <a href="#" class="btn btn-primary" style="margin-left: 35%;margin-top: 7.5%;"><h7>Visit store</h7></a>         
+          </div>
+        </div>
+        <div class="card shadow card_container">
+                <img class="card-img-top" src="./images/map.png"  height="350px" alt="Card image cap">
+                <div class="card-body">
+                  <h5 class="card-title">Nearby Hospitals.</h5>
+                  <p class="card-text" >Search nearby Hospitals and medical stores around you.</p>
+                  <a href="#" class="btn btn-primary" style="margin-left: 35%;margin-top: 7%;"><h7>Search</h7></a>
+                </div>
+              </div>        
+      </div>
+
+     
+</body>
+</html>
