@@ -148,7 +148,7 @@ app.post('/category',(req,res)=>{
     {
         if(err)
         console.log(err);
-        //res.redirect('/admin.html');
+        res.redirect('/admin.html');
     });
 })
 
@@ -164,7 +164,7 @@ app.post('/medicine',(req,res)=>{
     {
         if(err)
         console.log(err);
-        //res.redirect('/admin.html');
+       // res.redirect('/admin.html');
     })
 })
 
@@ -242,7 +242,7 @@ app.get('/adduser',(req,res)=>{
     let pswd = req.body.password;
     if(uname == 'admin' && pswd == 'Admin1234'){
         req.session.user = "admin";
-        return res.redirect("/admin.html");
+        return res.sendFile(__dirname+"/admin.html");
     }
     user.find({username : uname , password : pswd},(err,doc)=>{
         if(err){
