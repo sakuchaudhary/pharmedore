@@ -2,7 +2,7 @@
 ### Pharmedore - One stop pharmacy and medical store!
 The online platform for multi users i.e. more than 1 user at a time which provies you the medication(online store), Blood Bank facility, asking the Experts and finding nearby hospitals.
 In this admin can add the information of medicines like category, medname, medprice, med desc, medquan and image of med. For image of the med to display 
-you must save the image with the name of medname.jpg in medimages folder. User can search and buy the medicines as per their requirements. If med is out of stock
+you must save the image with the name of medname.jpg in public/medimages (create medimages folder inside public folder) folder. User can search and buy the medicines as per their requirements. If med is out of stock
 buy button is deactivated. User is uniquely identified by the username which is chosen by the user itself.
 # pre-requisites
 * nodejs
