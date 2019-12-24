@@ -5,7 +5,7 @@ In this admin can add the information of medicines like category, medname, medpr
 you must save the image with the name of medname.jpg in public/medimages (create medimages folder inside public folder) folder. User can search and buy the medicines as per their requirements. If med is out of stock
 buy button is deactivated. User is uniquely identified by the username which is chosen by the user itself.
 This is made using :- 
-#### JavaScrpit, Nodejs, HTML, CSS, BootStrap, JQuery, Mongodb.
+#### JavaScrpit, Nodejs, HTML, CSS, BootStrap, JQuery, Mongodb, Ajax.
 # pre-requisites
 * nodejs
 * mongodb
