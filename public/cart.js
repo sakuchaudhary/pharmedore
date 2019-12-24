@@ -33,33 +33,49 @@ purchasebtn.addEventListener("click",function()
    }
    else
    {
-        for(var i=0;i<cartArray.length;i++)
+       
+    for(var i=0;i<cartArray.length;i++)
+    {
+        if(user.username==cartArray[i].username)
+            orderArray(cartArray[i]);    
+    }
+    
+    for(var i=0;i<cartArray.length;i++)
+    {
+        var temp = deleteFromCart(cartArray[i].mname);
+        if(temp!=-1)
         {
-            if(user.username==cartArray[i].username)
-                orderArray(cartArray[i]);    
-        }
-        for(var i=0;i<cartArray.length;i++)
-        {
-            var temp = deleteFromCart(cartArray[i].mname);
-            if(temp!=-1)
+            var ind = getIndex(cartArray[i].mname);
+            console.log(medArray[ind].mquan+" med db quan");
+            if((cartArray[i].mname==medArray[ind].mname && cartArray[i].mquan>medArray[ind].mquan) 
+                 || (cartArray[i].mname==medArray[ind].mname && medArray[ind].mquan==0))
             {
-                var ind = getIndex(cartArray[i].mname);
-                medArray[ind].mquan = medArray[ind].mquan-cartArray[i].mquan;
-                console.log(medArray[ind].mquan);
-                cartArray.splice(temp,1);
-                console.log(cartArray);
-                i--;
+                alert("Your Quantity of "+ cartArray[i].mname+" must be less than "+ medArray[ind].mquan);
+                alert("Edit the Quantity");
+                location.href='/user1.html';
+                
+            }
+            else
+            {
+            medArray[ind].mquan = medArray[ind].mquan-cartArray[temp].mquan;
+            updateMedicine(medArray);
+            console.log(medArray[ind].mquan+" after edit med db quan");
+            cartArray.splice(temp,1);
+            console.log(cartArray);
+            i--;
             }
         }
-        emptyCart(user.username);
-        updateMedicine(medArray);
-        for(var i=0;i<cartArray.length;i++)
-        {
-            if(cartArray[i].username==user.username)
-            createDom(cartArray[i]);
-        }
-        alert("Thank You for Shopping");
-       // location.href="/orders.html";
+    }
+    emptyCart(user.username);
+    
+    for(var i=0;i<cartArray.length;i++)
+    {
+        if(cartArray[i].username==user.username)
+        createDom(cartArray[i]);
+    }
+    
+    alert("Thank You for Shopping");
+   // location.href="/orders.html";
     }
     
 })
