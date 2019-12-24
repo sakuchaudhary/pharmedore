@@ -12,5 +12,5 @@ buy button is deactivated. User is uniquely identified by the username which is 
 * for Mongodb follow the link: https://www.guru99.com/installation-configuration-mongodb.html
 # Getting Started
 It runs on port 2000 and file is node1.js. Open cmd prompt in that folder and type node node1.js then open the browser and type localhost:2000 
-A webpage will be displayed and then proceed accordingly. To open admin portal, you first need to then login using admin as username and Admin1234 (A is capital) as password.
+A webpage will be displayed and then proceed accordingly. To open admin portal(localhost:2000/admin.html), you first need to login using admin as username and Admin1234 (A is capital) as password.
 You cannot directly open admin.html page.
