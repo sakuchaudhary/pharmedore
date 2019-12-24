@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/');
     },
     filename: function(req, file, cb) {
-        cb(null, req.body.username + path.extname(file.originalname));
+        cb(null, req.body.username + path.extname(file.originalname)); 
     }
 });
 
@@ -67,6 +67,25 @@ let Medicine = new Schema({
     mquan:Number
 })
 var medicine = mongoose.model('medicine',Medicine);
+
+let CartArray = new Schema({
+    username:String,
+    mname:String,
+    mdesc:String,
+    mprice:Number,
+    mquan:Number
+})
+var cartarray = mongoose.model('cartArray',CartArray);
+
+let Order = new Schema({
+    username:String,
+    mname:String,
+    mdesc:String,
+    mprice:Number,
+    mquan:Number,
+    price:Number
+})
+var order = mongoose.model('Order',Order);
 
 app.get('/',function(req,res)
 {
@@ -168,6 +187,35 @@ app.post('/medicine',(req,res)=>{
     })
 })
 
+app.post('/cartarray',(req,res)=>{
+    var len=JSON.parse(req.body.cartArray).length;
+    var sdata=new cartarray();
+    sdata.username=JSON.parse(req.body.cartArray)[len-1].username;
+    sdata.mname=JSON.parse(req.body.cartArray)[len-1].mname;
+    sdata.mdesc=JSON.parse(req.body.cartArray)[len-1].mdesc;
+    sdata.mprice=JSON.parse(req.body.cartArray)[len-1].mprice;
+    sdata.mquan=JSON.parse(req.body.cartArray)[len-1].mquan;
+    sdata.save(function(err)
+    {
+        if(err)
+        console.log(err);
+       // res.redirect('/admin.html');
+    })
+})
+
+app.get('/cartarray',(req,res)=>{
+    console.log('running it');
+    cartarray.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        //console.log(docs);
+        res.send(docs);
+       
+    });
+  });
+
 app.post('/update',(req,res)=>{
     var ob=(JSON.parse(req.body.obj));
        console.log(ob.oldmname);
@@ -207,6 +255,102 @@ var midFunction = (req,res,next)=>
 app.get('/admin.html',midFunction,(req,res)=>{
    res.sendFile(__dirname+'/admin.html');
    console.log("admin");
+})
+
+app.get('/orders.html',(req,res)=>
+{
+    res.sendFile(__dirname+'/orders.html');
+    console.log("order");
+})
+
+app.get('/cart.html',(req,res)=>
+{
+    res.sendFile(__dirname+'/cart.html');
+    console.log("cart");
+})
+
+app.post('/deletecartArray',(req,res)=>{
+    var ob = JSON.parse(req.body.obj);
+    cartarray.findOneAndRemove({'mname':ob.mname,'username':ob.username}, function(err){
+        if (err){
+            throw err;
+        }
+        console.log('deleted cart');
+    });
+})
+
+app.post('/emptycart',(req,res)=>{
+    var ob=(JSON.parse(req.body.username));
+    
+      cartarray.remove({'username':ob}, function(err){
+          if (err){
+              throw err;
+              
+          }
+          console.log('deleted user cart');
+      });
+})
+
+app.post('/updatemedicne',(req,res)=>{
+    var len=JSON.parse(req.body.medList).length;
+    var arr=JSON.parse(req.body.medList);
+    for(var i=0;i<len;i++)
+    {
+        var myquery = { mname: arr[i].mname };
+        var newvalues = { $set: {  mdesc:arr[i].mdesc,mprice:arr[i].mprice,mquan:arr[i].mquan } };
+        medicine.updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+                else
+            console.log("1 medicne updated");
+          });
+    }
+})
+
+app.post('/orderarray',(req,res)=>{
+
+    var len=JSON.parse(req.body.order).length;
+    var sdata=new order();
+    sdata.username=JSON.parse(req.body.order)[len-1].username;
+    sdata.mname=JSON.parse(req.body.order)[len-1].mname;
+    sdata.mdesc=JSON.parse(req.body.order)[len-1].mdesc;
+    sdata.mprice=JSON.parse(req.body.order)[len-1].mprice;
+    sdata.mquan=JSON.parse(req.body.order)[len-1].mquan;
+    sdata.price=JSON.parse(req.body.order)[len-1].pricepaid;
+
+    sdata.save(function(err)
+    {
+        if(err)
+        console.log(err);
+       // res.redirect('/admin.html');
+    })
+})
+
+app.get('/orderarray',(req,res)=>{
+    console.log('running it');
+    order.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        //console.log(docs);
+        res.send(docs);
+       
+    });
+  });
+
+app.post('/cartupdate',(req,res)=>
+{
+    var ob=(JSON.parse(req.body.obj));
+       console.log(ob.username+";;"+ob.mname);
+
+    var myquery = { mname: ob.mname, username: ob.username };
+  var newvalues = { $set: { mname: ob.mname, mdesc:ob.mdesc,mprice:ob.mprice,mquan:ob.mquan } };
+   
+    cartarray.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 cart document updated");
+    })
 })
 
 app.get('/adduser',(req,res)=>{
@@ -269,7 +413,7 @@ app.get('/user1.html',(req,res)=>{
          return res.send('Error 404 not found')
     }
     console.log("redirect user1");
-    res.sendFile(__dirname+'/user1.html');
+    res.redirect('/user1.html');
     })
 
 app.post('/getpic',(req,res)=>

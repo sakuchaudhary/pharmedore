@@ -158,8 +158,7 @@ function addproductToDom(obj)
     var div1 = document.createElement("div");
     div1.setAttribute("id","div1");
     div1.setAttribute("class","card");
-    div1.setAttribute("style","width:30%");
-
+   
     var div11 = document.createElement("div11");
     div11.setAttribute("id","div11");
     div11.setAttribute("class","card-body");

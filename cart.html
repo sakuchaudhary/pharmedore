@@ -59,26 +59,17 @@
               </ul>
             </div>  
           </nav>
-
           <div class="container" style="margin-left: 15%;">
-            <h3 class="display-5" style="margin-left: 5%;">Search Category</h3>
-            <br>
-            <div class="dropup">
-              <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Categories
-              <span class="caret"></span></button>
-              <button class="btn btn-secondary" id="allmed">All Medicines</button>
-              <ul class="dropdown-menu dropdown-menu-right scrollable-menu" role="menu" style="background-color: #e5e8e8;" id="ulist1">
-               </ul>
+          <div id="ListofMedicine">
+              <button class="btn btn-secondary" onclick="location.href='/user1.html'">Continue Shopping</button>
+              <button class="btn btn-secondary" onclick="location.href='/orders.html'">Your Orders</button>
+              <br><br>
+              <h1 id="total"></h1>
+              <button class="btn btn-danger mb-2" id="purchasebtn" style="margin-left: 35%;margin-top: -5%;">Purchase</button>
+                <!-- <h1 id="heading">All Medicines</h1> -->
+              </div>
             </div>
-          
-            <div class="input-group mb-4 input-group-lg" style="width:70%;margin-top: 3%;">
-              <input type="text" class="form-control" id="scategory" name="scategory">
-              <button class="btn btn-primary" id="scategorybtn" style="margin-left: 2%;">Search</button>
-            </div>
-               
-            <div id="ListofMedicine">
-              <h1 id="heading">All Medicines</h1>
-            </div>
-          <script src="user1.js"></script>    
+            
+          <script src="cart.js"></script>
 </body>
 </html>
