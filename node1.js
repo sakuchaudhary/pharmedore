@@ -87,6 +87,34 @@ let Order = new Schema({
 })
 var order = mongoose.model('Order',Order);
 
+let Donors=new Schema({
+    username:String,
+    uname:String,
+    uage:Number,
+    ugrp:String,
+    uphn:Number,
+    uaddress:String,
+    approved:String
+});
+var donor = mongoose.model('donors', Donors);
+
+let Receiver=new Schema({
+    username:String,
+    uname:String,
+    uage:Number,
+    ugrp:String,
+    uphn:Number,
+    uaddress:String,
+    approved:String
+});
+var receiver = mongoose.model('receivers', Receiver);
+
+let Grps = new Schema({
+    grp:String,
+    qty:Number
+})
+var grps = mongoose.model('Groups',Grps);
+
 app.get('/',function(req,res)
 {
     res.sendFile(__dirname+'/home.html');
@@ -155,7 +183,7 @@ app.post('/adduser',(req,res)=>{
      {
          console.log("Error");
      }
-     res.sendFile(__dirname+'/login.html');    
+     //res.sendFile(__dirname+'/login.html');    
     });
  
 })
@@ -252,6 +280,10 @@ var midFunction = (req,res,next)=>
     next();
 }
 
+app.get('/blood.html',(req,res)=>{
+    res.sendFile(__dirname+'/blood.html');
+})
+
 app.get('/admin.html',midFunction,(req,res)=>{
    res.sendFile(__dirname+'/admin.html');
    console.log("admin");
@@ -276,6 +308,48 @@ app.post('/deletecartArray',(req,res)=>{
             throw err;
         }
         console.log('deleted cart');
+    });
+})
+
+app.post('/addonor',(req,res)=>{
+    console.log("inside donor");
+    var len=JSON.parse(req.body.donorList).length;
+    var sData=new donor();
+    sData.username=JSON.parse(req.body.donorList)[len-1].username;
+    sData.uname=JSON.parse(req.body.donorList)[len-1].uname;
+    sData.uage=JSON.parse(req.body.donorList)[len-1].uage;
+    sData.ugrp=JSON.parse(req.body.donorList)[len-1].ugrp;
+    sData.uphn=JSON.parse(req.body.donorList)[len-1].uphn;
+    sData.uaddress=JSON.parse(req.body.donorList)[len-1].uaddress;
+    sData.approved=JSON.parse(req.body.donorList)[len-1].approved;
+    sData.save(function(err)
+    {
+    if(err)
+     {
+         console.log("Error");
+     }
+     console.log("donor saved");
+    });
+})
+
+app.post('/addreceiver',(req,res)=>{
+    console.log("inside receiver");
+    var len=JSON.parse(req.body.receiverList).length;
+    var sData=new receiver();
+    sData.username=JSON.parse(req.body.receiverList)[len-1].username;
+    sData.uname=JSON.parse(req.body.receiverList)[len-1].uname;
+    sData.uage=JSON.parse(req.body.receiverList)[len-1].uage;
+    sData.ugrp=JSON.parse(req.body.receiverList)[len-1].ugrp;
+    sData.uphn=JSON.parse(req.body.receiverList)[len-1].uphn;
+    sData.uaddress=JSON.parse(req.body.receiverList)[len-1].uaddress;
+    sData.approved=JSON.parse(req.body.receiverList)[len-1].approved;
+    sData.save(function(err)
+    {
+    if(err)
+     {
+         console.log("Error");
+     }
+     console.log("receiver saved");
     });
 })
 
@@ -379,7 +453,97 @@ app.get('/adduser',(req,res)=>{
     });
   });
 
+app.get('/donorarray',(req,res)=>{
+    console.log("get donor arry");
+    donor.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        //console.log(docs);
+        res.send(docs);
+       
+    });
+})
 
+app.get('/receiverarray',(req,res)=>{
+    console.log("get donor arry");
+    receiver.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        //console.log(docs);
+        res.send(docs); 
+    });
+})
+
+app.post('/donorupdate',(req,res)=>{
+    var ob=(JSON.parse(req.body.obj));
+    console.log(ob);
+       console.log(ob.username+";;"+ob.uname);
+
+    var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
+  var newvalues = { $set: { approved: ob.approved } };
+   
+    donor.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 donor document updated");
+    })
+})
+
+app.post('/receiverupdate',(req,res)=>{
+    var ob=(JSON.parse(req.body.obj));
+    console.log(ob);
+       console.log(ob.username+";;"+ob.uname);
+
+    var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
+  var newvalues = { $set: { approved: ob.approved } };
+   
+    receiver.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 donor document updated");
+    })  
+})
+
+app.post('/addgrp',(req,res)=>{
+    var len=JSON.parse(req.body.obj).length;
+    console.log(req.body.obj);
+    var sdata=new grps();
+    sdata.grp=JSON.parse(req.body.obj).grp;
+    sdata.qty=JSON.parse(req.body.obj).qty;
+    sdata.save(function(err)
+    {
+        if(err)
+        console.log(err);
+       // res.redirect('/admin.html');
+    })
+})
+
+app.post('/grpupdate',(req,res)=>{
+    var ob=(JSON.parse(req.body.obj));
+    console.log(ob);
+    var myquery = { grp: ob.grp};
+  var newvalues = { $set: { qty: ob.qty } };
+   
+    grps.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 grp document updated");
+    })
+})
+
+app.get('/grparray',(req,res)=>{
+    console.log("insdie grp");
+    grps.find({},function(err,docs)
+    {
+      if(err){
+      console.log(err);}
+      res.send(docs);
+    })  
+})
   router.post('/login',(req,res)=>
   {
     let uname = req.body.username;
@@ -387,6 +551,11 @@ app.get('/adduser',(req,res)=>{
     if(uname == 'admin' && pswd == 'Admin1234'){
         req.session.user = "admin";
         return res.sendFile(__dirname+"/admin.html");
+    }
+    if(uname == 'bloodadmin' && pswd == 'Adminblood')
+    {
+        req.session.user = 'Adminblood';
+        return res.sendFile(__dirname+'/adminblood.html');
     }
     user.find({username : uname , password : pswd},(err,doc)=>{
         if(err){
@@ -403,17 +572,35 @@ app.get('/adduser',(req,res)=>{
     })
   })
 
+  var midFunction2 = (req,res,next)=>
+{
+    console.log("insdie medfxn");
+    if(req.path==='/adminblood.html')
+    {
+        res.redirect('/login.html');
+        console.log("redirect login");
+    }
+    else
+    next();
+}
+
+app.get('/adminblood.html',midFunction2,(req,res)=>{
+    res.sendFile(__dirname+'/adminblood.html');
+    console.log("adminblood");
+ })
+ 
 app.get('/user1.html',(req,res)=>{
     res.sendFile(__dirname+'/user1.html');
 })
 
   app.get('/user',(req,res)=>{
     let user=req.session.user;
-    if(user==undefined || user=="admin"){
+    if(user==undefined || user=="admin" || user=="bloodadmin")
+    {
          return res.send('Error 404 not found')
     }
     console.log("redirect user1");
-    res.redirect('/user1.html');
+    res.redirect('/');
     })
 
 app.post('/getpic',(req,res)=>
@@ -424,10 +611,10 @@ app.post('/getpic',(req,res)=>
         if(err)
         console.log(err)
         //res.json(docs)
-        console.log(docs.username);
+        //console.log(docs.username);
         console.log("redirect picuser");
         res.set("Content-Type","image/jpg");
-        res.render('user1',{username:docs.username});//__dirname+'/uploads/'+docs.username+'.jpg');
+        //res.render('user1',{username:docs.username});//__dirname+'/uploads/'+docs.username+'.jpg');
         })
     })
     

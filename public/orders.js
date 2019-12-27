@@ -147,6 +147,9 @@ function loginInDisplay()
     
     if(user!=undefined)
     {
+        name.setAttribute("style","height:auto; font-weight:bold;");
+    logout.setAttribute("style","height:auto; font-weight:bold;");
+    
         name.innerHTML = "hello" + user.username;
         logout.innerHTML = "logout";
         console.log(img);

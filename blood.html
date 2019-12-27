@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+  <title>Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <style>
+    .card_container:hover{
+      transform: scale(1.1);
+      transition: all .4s ease-in-out;
+    }
+    input {
+    border: 5px solid white; 
+    box-shadow: 
+      inset 0 0 8px  rgba(0,0,0,0.1),
+            0 0 16px rgba(0,0,0,0.1); 
+    padding: 15px;
+    background: rgba(255,255,255,0.5);
+    margin: 0 0 10px 0;
+    border-radius: 15px;
+}
+  </style>
+</head>
+
+<body onload="callonload()" style="background-color:#e5e8e8 ;">
+
+    <nav class="navbar navbar-expand-md  navbar-light">
+            <img src="./images/logo1.png" width="175px" height="175px">
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+              <ul class="navbar-nav">
+                <li>
+                  <h2 class="display-3">Pharmedore</h2>
+                  <p>One stop pharmacy and medical store!</p>
+                </li>
+              </ul>
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                  <img id="image" width="160px" height="160px">
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link btn btn-success mr-2 mb-2" style="width:75px;border-radius: 8px;color: black;font-weight: bold;" id="login">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link btn btn-danger mr-2" style="width:75px;border-radius: 8px;color: black;font-weight: bold;" id="signup">SignUp</a>
+                </li>
+              </ul>
+            </div>  
+          </nav>
+          <div class="container" style="margin-left: 15%;">
+            <button class="btn btn-primary btn-lg" id="donate">Donor</button>
+            <button class="btn btn-danger btn-lg" id="receive">Receipient</button>
+            <br><br>
+            <h1>Enter Details:</h1>
+            <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text shadow" style="width: 120px;">Name</span>
+                </div>
+                <input type="text" class="form-control" id="name" name="name">
+              </div>
+                  <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text shadow" style="width: 120px;">Age</span>
+                    </div>
+                    <input type="tel" maxlength="2" class="form-control" id="age" name="age">
+                  </div>
+                  <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text shadow" style="width: 120px;">Blood Grp</span>
+                    </div>
+                    <input type="text" class="form-control" id="grp" name="grp">
+                    </div>
+                    <span class="input-group-text" style="width: 490px;">please write 1 for Positive and 2 for negative. eg:- b1, AB2, A2,etc...</span>
+                  
+                  <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text shadow" style="width: 120px;">Contact</span>
+                    </div>
+                    <input type="tel" maxlength="10" class="form-control" id="phn" name="phn">
+                  </div>
+                      <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text shadow" style="width: 120px;">Address</span>
+                        </div>
+                        <input type="text" class="form-control" id="address" name="address">
+                      </div>
+                      <button id="donatebtn" class="btn btn-primary" style="visibility: hidden;">Donate</button>
+                      <button id="receivebtn" class="btn btn-danger" style="visibility: hidden;">Receive</button>
+                      <div id="ListofDonor" style="margin-top: 2%;">
+                        <br><br>
+                        </div>
+          </div>
+          <script src="blood.js"></script>
+</body>
+</html>
