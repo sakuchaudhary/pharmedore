@@ -182,7 +182,7 @@ receive.addEventListener("click",function()
     receivebtn.setAttribute("style","visibility:block; margin-left:-12%;");
 
     var h = document.createElement("h1");
-    h.innerHTML = "The times you Donated Blood";
+    h.innerHTML = "The times you Received Blood";
     ListofDonor.appendChild(h);
     
     for(var i=0;i<receiver.length;i++)
@@ -216,6 +216,10 @@ function createDom(obj)
     p3.setAttribute("class","card-text");
     p3.innerHTML="Group: "+obj.ugrp;
 
+    var p6 = document.createElement("h4");
+    p6.setAttribute("class","card-text");
+    p6.innerHTML="Units: "+obj.units;
+
     var p4 = document.createElement("p");
     p4.setAttribute("class","card-text");
     p4.innerHTML="Address: "+obj.uaddress;
@@ -227,6 +231,7 @@ function createDom(obj)
     div11.appendChild(p1);
     div11.appendChild(p2);
     div11.appendChild(p3);
+    div11.appendChild(p6);
     div11.appendChild(p4);
     div11.appendChild(p5);
     
@@ -277,7 +282,8 @@ donatebtn.addEventListener("click",function()
             ugrp:grp,
             uphn:phn,
             uaddress:address,
-            approved:"no"
+            approved:"no",
+            units:"0"
         }
         donor.push(newobj);
         console.log(donor);
@@ -338,7 +344,8 @@ receivebtn.addEventListener("click",function(){
                     ugrp:grp,
                     uphn:phn,
                     uaddress:address,
-                    approved:"no"
+                    approved:"no",
+                    units:"0"
                 }
                 receiver.push(newobj);
                 console.log(receiver);

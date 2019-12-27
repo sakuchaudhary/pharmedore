@@ -118,15 +118,16 @@ function createDom(obj,j)
     div11.appendChild(p3);
     div11.appendChild(p4);
     div11.appendChild(p5);
+    div11.appendChild(dqty);
+    div11.appendChild(br);  
     div11.appendChild(btnapprove); 
-    div11.appendChild(br);
-    div11.appendChild(dqty);   
+     
 
     div1.appendChild(div11);
     listofDonor.appendChild(div1);
 
     btnapprove.addEventListener("click",function(){
-        var dqty = document.getElementById("rqty").value;
+        var dqty = document.getElementById("dqty").value;
         if(dqty=="")
             alert("Enetr value in it");
         else
@@ -135,7 +136,8 @@ function createDom(obj,j)
             var newobj={
                 username:obj.username,
                 uname:obj.uname,
-                approved:donor[j].approved
+                approved:donor[j].approved,
+                units:dqty
             }
             console.log(newobj);
             alert("Approved..!!.. Blood donated");
@@ -218,7 +220,8 @@ function createDom2(obj,j)
             var newobj={
                 username:obj.username,
                 uname:obj.uname,
-                approved:receiver[j].approved
+                approved:receiver[j].approved,
+                units:rqty
             }
             console.log(newobj);
             alert("Approved..!!.. Blood donated");
@@ -249,9 +252,11 @@ function grpsarrayreceive(ugrp,rqty)
     updategrpdb(newobj);
 }
 
-function grpsarray(ugrp,dqty)
+function grpsarray(grp,dqty)
 {
     var newq=0;
+    var ugrp = grp.toLowerCase();
+    console.log(ugrp);
     for(var i=0;i<grps.length;i++)
     {
         if(grps[i].grp==ugrp)

@@ -94,7 +94,8 @@ let Donors=new Schema({
     ugrp:String,
     uphn:Number,
     uaddress:String,
-    approved:String
+    approved:String,
+    units:Number
 });
 var donor = mongoose.model('donors', Donors);
 
@@ -105,7 +106,8 @@ let Receiver=new Schema({
     ugrp:String,
     uphn:Number,
     uaddress:String,
-    approved:String
+    approved:String,
+    units:Number
 });
 var receiver = mongoose.model('receivers', Receiver);
 
@@ -322,6 +324,7 @@ app.post('/addonor',(req,res)=>{
     sData.uphn=JSON.parse(req.body.donorList)[len-1].uphn;
     sData.uaddress=JSON.parse(req.body.donorList)[len-1].uaddress;
     sData.approved=JSON.parse(req.body.donorList)[len-1].approved;
+    sData.units=JSON.parse(req.body.donorList)[len-1].units;
     sData.save(function(err)
     {
     if(err)
@@ -343,6 +346,7 @@ app.post('/addreceiver',(req,res)=>{
     sData.uphn=JSON.parse(req.body.receiverList)[len-1].uphn;
     sData.uaddress=JSON.parse(req.body.receiverList)[len-1].uaddress;
     sData.approved=JSON.parse(req.body.receiverList)[len-1].approved;
+    sData.units=JSON.parse(req.body.receiverList)[len-1].units;
     sData.save(function(err)
     {
     if(err)
@@ -484,7 +488,7 @@ app.post('/donorupdate',(req,res)=>{
        console.log(ob.username+";;"+ob.uname);
 
     var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
-  var newvalues = { $set: { approved: ob.approved } };
+  var newvalues = { $set: { approved: ob.approved,units:ob.units } };
    
     donor.updateOne(myquery, newvalues, function(err, res) {
     if (err) throw err;
@@ -499,7 +503,7 @@ app.post('/receiverupdate',(req,res)=>{
        console.log(ob.username+";;"+ob.uname);
 
     var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
-  var newvalues = { $set: { approved: ob.approved } };
+  var newvalues = { $set: { approved: ob.approved,units:ob.units } };
    
     receiver.updateOne(myquery, newvalues, function(err, res) {
     if (err) throw err;
@@ -599,8 +603,11 @@ app.get('/user1.html',(req,res)=>{
     {
          return res.send('Error 404 not found')
     }
+    else
+    {
     console.log("redirect user1");
     res.redirect('/');
+    }
     })
 
 app.post('/getpic',(req,res)=>

@@ -68,14 +68,16 @@ function getusername()
 
 function loginInDisplay()
 {
+    console.log("Logindisply");
     var name = document.getElementById("login");
     var logout = document.getElementById("signup");
+        
     
-    
-    if(user!=undefined || user!="undefined")
+    if(user!=undefined)
     {
         name.setAttribute("style","height:auto; font-weight:bold;");
         logout.setAttribute("style","height:auto; font-weight:bold;");
+    
         name.innerHTML = "hello " + user.username;
         logout.innerHTML = "logout";
         console.log(img);
@@ -100,6 +102,7 @@ function loginInDisplay()
         logout.innerHTML = "signup";
         login.addEventListener("click",function(event)
         {
+            console.log("login btn");
             location.href="login.html";
         })
         logout.addEventListener("click",function(event)
