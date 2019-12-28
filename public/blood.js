@@ -7,18 +7,17 @@ var ListofDonor = document.getElementById("ListofDonor");
 var src1;
 var donor=[];
 var receiver=[];
+var bloodBank=[];
 var user=[];
 var img=[];
-var grps=[];
 
 function callonload()
 {
-    //grpsarray();
-    getgrps();
     getusername();
     getStoredImages();
     getdonor();
     getreceiver();
+    getbb();
 }
 
 function getreceiver()
@@ -33,18 +32,16 @@ function getreceiver()
     xhttp.send();       
 }
 
-function getgrps()
+function getbb()
 {
-    console.log("getfrps");
     var xhttp=new XMLHttpRequest();
     xhttp.onreadystatechange= function(){
         if(this.readyState == 4 && this.status == 200){	
-            grps = JSON.parse(xhttp.responseText);
-            console.log(grps);
+            bloodBank = JSON.parse(xhttp.responseText);
         }
     }
-    xhttp.open("GET", "/grparray");
-    xhttp.send();       
+    xhttp.open("GET", "/getbb");
+    xhttp.send();          
 }
 
 function getdonor()
@@ -228,12 +225,17 @@ function createDom(obj)
     p5.setAttribute("class","card-text");
     p5.innerHTML="Contact: "+obj.uphn;
 
+    var p7 = document.createElement("p");
+    p7.setAttribute("class","card-text");
+    p7.innerHTML="BloodBank: "+obj.bname;
+
     div11.appendChild(p1);
     div11.appendChild(p2);
     div11.appendChild(p3);
     div11.appendChild(p6);
     div11.appendChild(p4);
     div11.appendChild(p5);
+    div11.appendChild(p7);
     
     div1.appendChild(div11);
     ListofDonor.appendChild(div1);
@@ -283,15 +285,89 @@ donatebtn.addEventListener("click",function()
             uphn:phn,
             uaddress:address,
             approved:"no",
-            units:"0"
+            units:"0",
+            bname:""
         }
         donor.push(newobj);
         console.log(donor);
         donordb(donor);
+
+        ListofDonor.innerHTML="";
         alert("Congrats.. You can donate");
-        confirm("You can come at 12:00 pm in abc hospital");
+        var h = document.createElement("h2");
+        h.innerHTML = "Chooose ur Location of Bloodbank";
+        ListofDonor.appendChild(h);
+
+        for(var i=0;i<bloodBank.length;i++)
+        {
+            if(bloodBank[i].name!="" || bloodBank[i].location!="")
+            addtoDom2(bloodBank[i],name);
+        }
     }
 })
+
+function addtoDom2(obj,name)
+{
+    var div1 = document.createElement("div");
+    div1.setAttribute("id","div1");
+    div1.setAttribute("class","card shadow");
+    div1.setAttribute("style","background-color:#e5e8e8");
+
+    var div11 = document.createElement("div11");
+    div11.setAttribute("id","div11");
+    div11.setAttribute("class","card-body");
+
+    var p1=document.createElement("p");
+    p1.setAttribute("class","card-text");
+    p1.innerHTML="Name: "+obj.name;
+
+    var p2 = document.createElement("p");
+    p2.setAttribute("class","card-text");
+    p2.innerHTML="Location: "+obj.location;
+
+    var br = document.createElement("br");
+
+    var btnchoose = document.createElement("button");
+    btnchoose.setAttribute("id","btnchoose");
+    btnchoose.setAttribute("class","btn btn-primary card-link");
+    btnchoose.innerHTML="Choose";
+
+    div11.appendChild(p1);
+    div11.appendChild(p2);
+    div11.appendChild(br);
+    div11.appendChild(btnchoose);
+    
+    div1.appendChild(div11);
+    ListofDonor.appendChild(div1);
+
+    btnchoose.addEventListener("click",function(){
+        alert("You can donate ur blood in "+obj.name+" at "+obj.location);
+        confirm("Confirm your donation");
+        var newobj={
+            username:user.username,
+            uname:name,
+            bname:obj.name,
+            units:"0",
+            approved:"no"
+        }
+        updatedonor(newobj);
+        ListofDonor.innerHTML="";
+    })
+}
+
+function updatedonor(obj)
+{
+    var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+   
+  }
+};
+xhttp.open("POST", "/donorupdate", true);
+xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+xhttp.send("obj="+JSON.stringify(obj));
+}
 
 receivebtn.addEventListener("click",function(){
     var flag=1;
@@ -324,36 +400,144 @@ receivebtn.addEventListener("click",function(){
     }
     else
     {
-        for(var i=0;i<grps.length;i++)
-        {
-            if(grps[i].grp==grp && grps[i].qty==0)
-                alert("Sorry this blood grp "+grps[i].grp+" doesnot exists");
-            else if(grps[i].grp==grp && grps[i].qty>0)
-            {
-                alert(grps[i].qty+" units are avaliable of "+grps[i].grp+" blood group");
-                confirm("You can call on this number 9876544321");
-                ListofDonor.innerHTML="";
-                var h = document.createElement("h4");
-                h.innerHTML = "if avaliable call on 9876544321";
-                ListofDonor.appendChild(h);
+        var newobj={
+            username:username,
+            uname:name,
+            uage:age,
+            ugrp:grp,
+            uphn:phn,
+            uaddress:address,
+            approved:"no",
+            units:"0",
+            bname:""
+        }
+        receiver.push(newobj);
+        console.log(receiver);
+        receiverdb(receiver);
 
-                var newobj={
-                    username:username,
-                    uname:name,
-                    uage:age,
-                    ugrp:grp,
-                    uphn:phn,
-                    uaddress:address,
-                    approved:"no",
-                    units:"0"
-                }
-                receiver.push(newobj);
-                console.log(receiver);
-                receiverdb(receiver);
-            }
+        ListofDonor.innerHTML="";
+        var h = document.createElement("h2");
+            h.innerHTML = "Names and locations of BloodBank";
+            ListofDonor.appendChild(h);
+        var p = document.createElement("p");
+            p.innerHTML = "If nothing showes it means "+grp+" blood grp is not availiabe";
+            ListofDonor.appendChild(p);
+
+        for(var i=0;i<bloodBank.length;i++)
+        {
+            func(bloodBank[i],grp,name);
         }
     }
 })
+
+function func(obj,grps,name)
+{
+    console.log(obj);
+    var quan=-1;
+    if(grps=="a1")
+        quan = obj.grp.a1;
+    else if(grps=="a2")
+        quan = obj.grp.a2;
+    else if(grps=="b1")
+        quan = obj.grp.b1;
+    else if(grps=="b2")
+        quan = obj.grp.b2;
+    else if(grps=="ab1")
+        quan = obj.grp.ab1;
+    else if(grps=="ab2")
+        quan = obj.grp.ab2;
+    else if(grps=="o1")
+        quan = obj.grp.o1;
+    else if(grps=="o2")
+        quan = obj.grp.o2;
+    console.log(quan);
+
+        if(quan>0)
+        {
+               var newobj= {
+                name:obj.name,
+                location:obj.location,
+                grp:grps,
+                units:quan
+            }
+            addToDom(newobj,name);
+            console.log(newobj);
+        }
+}
+
+function addToDom(obj,name)
+{
+    var div1 = document.createElement("div");
+    div1.setAttribute("id","div1");
+    div1.setAttribute("class","card shadow");
+    div1.setAttribute("style","background-color:#e5e8e8");
+
+    var div11 = document.createElement("div11");
+    div11.setAttribute("id","div11");
+    div11.setAttribute("class","card-body");
+
+    var p1=document.createElement("p");
+    p1.setAttribute("class","card-text");
+    p1.innerHTML="Name: "+obj.name;
+
+    var p2 = document.createElement("p");
+    p2.setAttribute("class","card-text");
+    p2.innerHTML="Location: "+obj.location;
+
+    var p3=document.createElement("p");
+    p3.setAttribute("class","card-text");
+    p3.innerHTML="Group: "+obj.grp;
+
+    var p4 = document.createElement("h4");
+    p4.setAttribute("class","card-text");
+    p4.innerHTML="Units: "+obj.units;
+
+    var br = document.createElement("br");
+
+    var btnchoose = document.createElement("button");
+    btnchoose.setAttribute("id","btnchoose");
+    btnchoose.setAttribute("class","btn btn-danger card-link");
+    btnchoose.innerHTML="Choose";
+
+    div11.appendChild(p1);
+    div11.appendChild(p2);
+    div11.appendChild(p3);
+    div11.appendChild(p4);
+    div11.appendChild(br);
+    div11.appendChild(btnchoose);
+    
+    div1.appendChild(div11);
+    ListofDonor.appendChild(div1);
+
+    btnchoose.addEventListener("click",function(){
+        alert("You can Receive blood in "+obj.name+" at "+obj.location);
+        confirm("Confirm your Location");
+        var newobj={
+            username:user.username,
+            uname:name,
+            bname:obj.name,
+            units:"0",
+            approved:"no"
+        }
+        updatereceiver(newobj);
+        console.log(newobj.bname);
+        ListofDonor.innerHTML="";
+    })
+}
+
+function updatereceiver(obj)
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     
+    }
+  };
+  xhttp.open("POST", "/receiverupdate", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  
+  xhttp.send("obj="+JSON.stringify(obj));
+}
 
 function donordb(donor)
 {
@@ -380,68 +564,4 @@ if (this.readyState == 4 && this.status == 200) {
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhttp.send("receiverList="+JSON.stringify(receiver));
 
-}
-
-function grpsarray()
-{
-    var obj1={
-        grp:"a1",
-        qty:"0"
-    }
-    var obj2={
-        grp:"a2",
-        qty:"0"
-    }
-    var obj3={
-        grp:"b1",
-        qty:"0"
-    }
-    var obj4={
-        grp:"b2",
-        qty:"0"
-    }
-    var obj5={
-        grp:"ab1",
-        qty:"0"
-    }
-    var obj6={
-        grp:"ab2",
-        qty:"0"
-    }
-    var obj7={
-        grp:"o1",
-        qty:"0"
-    }
-    var obj8={
-        grp:"o2",
-        qty:"0"
-    }
-    grps.push(obj1);
-    grps.push(obj2);
-    grps.push(obj3);
-    grps.push(obj4);
-    grps.push(obj5);
-    grps.push(obj6);
-    grps.push(obj7);
-    grps.push(obj8);
-    console.log(grps);
-    for(var i=0;i<grps.length;i++)
-    {
-        grpsdb(grps[i]);
-    }
-    
-}
-
-function grpsdb(obj)
-{
-    console.log(obj);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-       
-        }
-        };
-      xhttp.open("POST", "/addgrp", true);
-      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.send("obj="+JSON.stringify(obj));
 }

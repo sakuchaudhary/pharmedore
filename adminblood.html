@@ -26,7 +26,7 @@
   </style>
 </head>
 
-<body onload="getdonor(),getgrps(),getreceiver()" style="background-color:#e5e8e8 ;">
+<body onload="getdonor(),getreceiver(),getbb()" style="background-color:#e5e8e8 ;">
 
     <nav class="navbar navbar-expand-md  navbar-light">
             <img src="./images/logo1.png" width="175px" height="175px">
@@ -54,12 +54,14 @@
           <div class="container" style="margin-left: 15%;">
             <button class="btn btn-primary btn-lg" id="donate">Donor</button>
             <button class="btn btn-danger btn-lg" id="receive">Receipient</button>
+            <button class="btn btn-secondary" id="addbb" style="float: right;">Add BloodBank</button>
             <div class="input-group mb-3 input-group-lg" style="width:70%;margin-top: 3%;">
                 <div class="input-group-prepend">
                   <span class="input-group-text shadow" style="width: 120px;">Username</span>
                 </div>
                 <input type="text" class="form-control" id="username" name="username">
                 <button class="btn btn-primary" id="sbtn" style="margin-left: 2%;">Search</button>
+                
               </div>
           <div id="listofDonor">
 

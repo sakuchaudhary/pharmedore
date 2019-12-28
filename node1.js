@@ -95,7 +95,8 @@ let Donors=new Schema({
     uphn:Number,
     uaddress:String,
     approved:String,
-    units:Number
+    units:Number,
+    bname:String
 });
 var donor = mongoose.model('donors', Donors);
 
@@ -107,15 +108,26 @@ let Receiver=new Schema({
     uphn:Number,
     uaddress:String,
     approved:String,
-    units:Number
+    units:Number,
+    bname:String
 });
 var receiver = mongoose.model('receivers', Receiver);
 
-let Grps = new Schema({
-    grp:String,
-    qty:Number
+var BloodBank = new Schema({
+    name:String,
+    location:String,
+    grp:({
+        a1:Number,
+        a2:Number,
+        b1:Number,
+        b2:Number,
+        ab1:Number,
+        ab2:Number,
+        o1:Number,
+        o2:Number
+    })
 })
-var grps = mongoose.model('Groups',Grps);
+var bloodbank = mongoose.model('bloodbanks',BloodBank);
 
 app.get('/',function(req,res)
 {
@@ -325,6 +337,7 @@ app.post('/addonor',(req,res)=>{
     sData.uaddress=JSON.parse(req.body.donorList)[len-1].uaddress;
     sData.approved=JSON.parse(req.body.donorList)[len-1].approved;
     sData.units=JSON.parse(req.body.donorList)[len-1].units;
+    sData.bname=JSON.parse(req.body.donorList)[len-1].bname;
     sData.save(function(err)
     {
     if(err)
@@ -347,6 +360,7 @@ app.post('/addreceiver',(req,res)=>{
     sData.uaddress=JSON.parse(req.body.receiverList)[len-1].uaddress;
     sData.approved=JSON.parse(req.body.receiverList)[len-1].approved;
     sData.units=JSON.parse(req.body.receiverList)[len-1].units;
+    sData.bname=JSON.parse(req.body.receiverList)[len-1].bname;
     sData.save(function(err)
     {
     if(err)
@@ -357,6 +371,55 @@ app.post('/addreceiver',(req,res)=>{
     });
 })
 
+app.post('/addbb',(req,res)=>{
+    var ob = (JSON.parse(req.body.obj));
+    console.log(ob);
+    var sdata = new bloodbank();
+    sdata.name = ob.name;
+    sdata.location = ob.location;
+    sdata.grp.a1 = ob.grps.a1;
+    sdata.grp.a2 = ob.grps.a2;
+    sdata.grp.b1 = ob.grps.b1;
+    sdata.grp.b2 = ob.grps.b2;
+    sdata.grp.ab1 = ob.grps.ab1;
+    sdata.grp.ab2 = ob.grps.ab2;
+    sdata.grp.o1 = ob.grps.o1;
+    sdata.grp.o2 = ob.grps.o2;
+    sdata.save(function(err)
+    {
+    if(err)
+     {
+         console.log("Error");
+     }
+     console.log("bb saved");
+    });
+})
+
+app.get('/getbb',(req,res)=>{
+    console.log('running it');
+    bloodbank.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        res.send(docs);
+    });
+})
+
+app.post('/bbupdate',(req,res)=>{
+    var ob = JSON.parse(req.body.obj);
+    console.log(ob);
+    var myquery = { name: ob.name };
+  var newvalues = { $set: { grp: ob.grp} };
+   console.log(ob.grp);
+    bloodbank.updateOne(myquery, newvalues, function(err, res) {
+      //  console.log(newvalues);
+    if (err) throw err;
+        else
+    console.log("1 bb document updated");
+    })
+
+})
 app.post('/emptycart',(req,res)=>{
     var ob=(JSON.parse(req.body.username));
     
@@ -488,7 +551,7 @@ app.post('/donorupdate',(req,res)=>{
        console.log(ob.username+";;"+ob.uname);
 
     var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
-  var newvalues = { $set: { approved: ob.approved,units:ob.units } };
+  var newvalues = { $set: { approved: ob.approved,units:ob.units,bname:ob.bname } };
    
     donor.updateOne(myquery, newvalues, function(err, res) {
     if (err) throw err;
@@ -500,55 +563,19 @@ app.post('/donorupdate',(req,res)=>{
 app.post('/receiverupdate',(req,res)=>{
     var ob=(JSON.parse(req.body.obj));
     console.log(ob);
-       console.log(ob.username+";;"+ob.uname);
+       console.log(ob.username+";;"+ob.uname+";"+ob.bname);
 
     var myquery = { uname: ob.uname, username: ob.username, approved:"no" };
-  var newvalues = { $set: { approved: ob.approved,units:ob.units } };
+  var newvalues = { $set: { approved: ob.approved,units:ob.units, bname:ob.bname } };
    
     receiver.updateOne(myquery, newvalues, function(err, res) {
     if (err) throw err;
         else
-    console.log("1 donor document updated");
+    console.log("1 receiver document updated");
     })  
 })
 
-app.post('/addgrp',(req,res)=>{
-    var len=JSON.parse(req.body.obj).length;
-    console.log(req.body.obj);
-    var sdata=new grps();
-    sdata.grp=JSON.parse(req.body.obj).grp;
-    sdata.qty=JSON.parse(req.body.obj).qty;
-    sdata.save(function(err)
-    {
-        if(err)
-        console.log(err);
-       // res.redirect('/admin.html');
-    })
-})
-
-app.post('/grpupdate',(req,res)=>{
-    var ob=(JSON.parse(req.body.obj));
-    console.log(ob);
-    var myquery = { grp: ob.grp};
-  var newvalues = { $set: { qty: ob.qty } };
-   
-    grps.updateOne(myquery, newvalues, function(err, res) {
-    if (err) throw err;
-        else
-    console.log("1 grp document updated");
-    })
-})
-
-app.get('/grparray',(req,res)=>{
-    console.log("insdie grp");
-    grps.find({},function(err,docs)
-    {
-      if(err){
-      console.log(err);}
-      res.send(docs);
-    })  
-})
-  router.post('/login',(req,res)=>
+router.post('/login',(req,res)=>
   {
     let uname = req.body.username;
     let pswd = req.body.password;

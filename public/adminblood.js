@@ -3,8 +3,8 @@ var receiver=[];
 var listofDonor = document.getElementById("listofDonor");
 var donate = document.getElementById("donate");
 var receive = document.getElementById("receive");
-var grps=[];
 var targetParent;
+var addbb = document.getElementById("addbb");
 
 function getdonor()
 {
@@ -27,20 +27,6 @@ function getreceiver()
         }
     }
     xhttp.open("GET", "/receiverarray");
-    xhttp.send();       
-}
-
-function getgrps()
-{
-    console.log("getfrps");
-    var xhttp=new XMLHttpRequest();
-    xhttp.onreadystatechange= function(){
-        if(this.readyState == 4 && this.status == 200){	
-            grps = JSON.parse(xhttp.responseText);
-            console.log(grps);
-        }
-    }
-    xhttp.open("GET", "/grparray");
     xhttp.send();       
 }
 
@@ -87,7 +73,7 @@ function createDom(obj,j)
     p2.setAttribute("class","card-text");
     p2.innerHTML="Age: "+obj.uage;
 
-    var p3=document.createElement("p");
+    var p3=document.createElement("h5");
     p3.setAttribute("class","card-text");
     p3.innerHTML="Group: "+obj.ugrp;
 
@@ -98,6 +84,10 @@ function createDom(obj,j)
     var p5 = document.createElement("p");
     p5.setAttribute("class","card-text");
     p5.innerHTML="Contact: "+obj.uphn;
+
+    var p6 = document.createElement("h5");
+    p6.setAttribute("class","card-text");
+    p6.innerHTML="Blood Bank: "+obj.bname;
 
     var br = document.createElement("br");
 
@@ -118,18 +108,19 @@ function createDom(obj,j)
     div11.appendChild(p3);
     div11.appendChild(p4);
     div11.appendChild(p5);
-    div11.appendChild(dqty);
+    div11.appendChild(p6);
     div11.appendChild(br);  
     div11.appendChild(btnapprove); 
-     
+     div11.appendChild(br);
 
     div1.appendChild(div11);
     listofDonor.appendChild(div1);
 
     btnapprove.addEventListener("click",function(){
-        var dqty = document.getElementById("dqty").value;
-        if(dqty=="")
-            alert("Enetr value in it");
+        div11.appendChild(dqty);
+        var qty = document.getElementById("dqty").value;
+        if(qty=="")
+            alert("Enter value in it");
         else
         {
             donor[j].approved = "yes";
@@ -137,12 +128,13 @@ function createDom(obj,j)
                 username:obj.username,
                 uname:obj.uname,
                 approved:donor[j].approved,
-                units:dqty
+                units:qty,
+                bname:obj.bname
             }
             console.log(newobj);
             alert("Approved..!!.. Blood donated");
             updatedonor(newobj);
-            grpsarray(obj.ugrp,dqty);
+            grpsarray(obj.ugrp,qty,obj.bname);
             targetParent = event.target.parentNode;
             targetParent.parentNode.removeChild(targetParent);
         }
@@ -172,7 +164,7 @@ function createDom2(obj,j)
     p2.setAttribute("class","card-text");
     p2.innerHTML="Age: "+obj.uage;
 
-    var p3=document.createElement("p");
+    var p3=document.createElement("h5");
     p3.setAttribute("class","card-text");
     p3.innerHTML="Group: "+obj.ugrp;
 
@@ -192,6 +184,10 @@ function createDom2(obj,j)
     rqty.setAttribute("id","rqty");
     rqty.setAttribute("placeholder","QReceived");
 
+    var p6 = document.createElement("h5");
+    p6.setAttribute("class","card-text");
+    p6.innerHTML="Blood Bank: "+obj.bname;
+
     var btnapprove = document.createElement("button");
     btnapprove.setAttribute("id","btnbuy");
     btnapprove.setAttribute("class","btn btn-danger card-link");
@@ -203,16 +199,18 @@ function createDom2(obj,j)
     div11.appendChild(p3);
     div11.appendChild(p4);
     div11.appendChild(p5);
-    div11.appendChild(rqty);
-    div11.appendChild(br);
-    div11.appendChild(btnapprove);    
+    div11.appendChild(p6);
+    div11.appendChild(btnapprove);  
+    div11.appendChild(br);  
 
     div1.appendChild(div11);
     listofDonor.appendChild(div1);
 
     btnapprove.addEventListener("click",function(){
-        var rqty = document.getElementById("rqty").value;
-        if(rqty=="")
+        div11.appendChild(rqty);
+    
+        var qty = document.getElementById("rqty").value;
+        if(qty=="")
             alert("Enetr value in it");
         else
         {
@@ -221,56 +219,163 @@ function createDom2(obj,j)
                 username:obj.username,
                 uname:obj.uname,
                 approved:receiver[j].approved,
-                units:rqty
+                units:qty,
+                bname:obj.bname
             }
             console.log(newobj);
-            alert("Approved..!!.. Blood donated");
+            alert("Approved..!!.. Blood Received");
             updatereceiver(newobj);
-            grpsarrayreceive(obj.ugrp,rqty);
+            grpsarrayreceive(obj.ugrp,qty,obj.bname);
             targetParent = event.target.parentNode;
             targetParent.parentNode.removeChild(targetParent);            
         }
     })
 }
 
-function grpsarrayreceive(ugrp,rqty)
+function check(obj,grp,qty,bname)
 {
-    var newq=0;
-    for(var i=0;i<grps.length;i++)
+    var quan=0;
+    var grps = grp.toLowerCase();
+    var rqty = parseInt(qty);
+    if(grps=="a1")
     {
-        if(grps[i].grp==ugrp)
-        {
-            grps[i].qty-=rqty;
-            newq=grps[i].qty;
-        }
+        quan = obj.grp.a1;
+        quan-=rqty;
+        obj.grp.a1 = quan;
     }
+    else if(grps=="a2")
+    {
+        quan = obj.grp.a2;
+        quan-=rqty;
+        obj.grp.a2 = quan;
+    }
+    else if(grps=="b1")
+    {
+        quan = obj.grp.b1;
+        quan-=rqty;
+        obj.grp.b1 = quan;
+    }
+    else if(grps=="b2")
+    {
+        quan = obj.grp.b2;
+        quan-=rqty;
+        obj.grp.b2 = quan;
+    }
+    else if(grps=="ab1")
+    {
+        quan = obj.grp.ab1;
+        quan-=rqty;
+        obj.grp.ab1 = quan;
+    }
+    else if(grps=="ab2")
+    {
+        quan = obj.grp.ab2;
+        quan-=rqty;
+        obj.grp.ab2 = quan;
+    }
+    else if(grps=="o1")
+    {
+        quan = obj.grp.o1;
+        quan-=rqty;
+        obj.grp.o1 = quan;
+    }
+    else if(grps=="o2")
+    {
+        quan = obj.grp.o2;
+        quan-=rqty;
+        obj.grp.o2 = quan;
+    }
+    console.log(quan);
     var newobj={
-        grp:ugrp,
-        qty:newq
+        name:bname,
+        grp:obj.grp
     }
+    updatebbdb(newobj);
     console.log(newobj);
-    updategrpdb(newobj);
 }
 
-function grpsarray(grp,dqty)
+function grpsarrayreceive(ugrp,rqty,bname)
 {
-    var newq=0;
-    var ugrp = grp.toLowerCase();
-    console.log(ugrp);
-    for(var i=0;i<grps.length;i++)
+    for(var i=0;i<bloodBank.length;i++)
     {
-        if(grps[i].grp==ugrp)
+        if(bloodBank[i].name==bname)
         {
-            grps[i].qty+=dqty;
-            newq=grps[i].qty;
+            check(bloodBank[i],ugrp,rqty,bname);
         }
     }
-    var newobj={
-        grp:ugrp,
-        qty:newq
+}
+
+function grpsarray(grp,dqty,bname)
+{
+    for(var i=0;i<bloodBank.length;i++)
+    {
+        if(bloodBank[i].name==bname)
+        {
+            checkdonate(bloodBank[i],grp,dqty,bname);
+        }
     }
+}
+
+function checkdonate(obj,grp,qty,bname)
+{
+    var quan=0;
+    var grps=grp.toLowerCase();
+    var rqty = parseInt(qty);
+    if(grps=="a1")
+    {
+        quan = obj.grp.a1;
+        quan+=rqty;
+        obj.grp.a1 = quan;
+    }
+    else if(grps=="a2")
+    {
+        quan = obj.grp.a2;
+        quan+=rqty;
+        obj.grp.a2 = quan;
+    }
+    else if(grps=="b1")
+    {
+        quan = obj.grp.b1;
+        quan+=rqty;
+        obj.grp.b1 = quan;
+    }
+    else if(grps=="b2")
+    {
+        quan = obj.grp.b2;
+        quan+=rqty;
+        obj.grp.b2 = quan;
+    }
+    else if(grps=="ab1")
+    {
+        quan = obj.grp.ab1;
+        quan+=rqty;
+        obj.grp.ab1 = quan;
+    }
+    else if(grps=="ab2")
+    {
+        quan = obj.grp.ab2;
+        quan+=rqty;
+        obj.grp.ab2 = quan;
+    }
+    else if(grps=="o1")
+    {
+        quan = obj.grp.o1;
+        quan+=rqty;
+        obj.grp.o1 = quan;
+    }
+    else if(grps=="o2")
+    {
+        quan = obj.grp.o2;
+        quan+=rqty;
+        obj.grp.o2 = quan;
+    }
+    console.log(quan);
+    var newobj={
+        name:bname,
+        grp:obj.grp
+    }
+    updatebbdb(newobj);
     console.log(newobj);
-    updategrpdb(newobj);
 }
 
 function updatedonor(obj)
@@ -301,7 +406,7 @@ function updatereceiver(obj)
   xhttp.send("obj="+JSON.stringify(obj));
 }
 
-function updategrpdb(obj)
+function updatebbdb(obj)
 {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
@@ -309,7 +414,7 @@ function updategrpdb(obj)
      
     }
   };
-  xhttp.open("POST", "/grpupdate", true);
+  xhttp.open("POST", "/bbupdate", true);
   xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   
   xhttp.send("obj="+JSON.stringify(obj));   
@@ -326,4 +431,49 @@ function logoutfunc()
     }
     xhttp.open("GET", "/logout");
     xhttp.send();   
+}
+
+var bloodBank=[];
+addbb.addEventListener("click",function(){  
+    var newobj={
+        name:"",
+        location:"",
+         grps:{
+            a1:"0",
+            a2:"0",
+            b1:"0",
+            b2:"0",
+            ab1:"0",
+            ab2:"0",
+            o1:"0",
+            o2:"0"
+        }
+    }
+    addbbdb(newobj);
+    console.log(newobj);
+})
+
+function addbbdb(obj)
+{
+    var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+if (this.readyState == 4 && this.status == 200) {
+   
+    }
+    };
+  xhttp.open("POST", "/addbb", true);
+  xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhttp.send("obj="+JSON.stringify(obj));
+}
+
+function getbb()
+{
+    var xhttp=new XMLHttpRequest();
+    xhttp.onreadystatechange= function(){
+        if(this.readyState == 4 && this.status == 200){	
+            bloodBank = JSON.parse(xhttp.responseText);
+        }
+    }
+    xhttp.open("GET", "/getbb");
+    xhttp.send();          
 }
