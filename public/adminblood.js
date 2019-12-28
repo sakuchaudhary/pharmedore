@@ -5,6 +5,7 @@ var donate = document.getElementById("donate");
 var receive = document.getElementById("receive");
 var targetParent;
 var addbb = document.getElementById("addbb");
+var sbtn = document.getElementById("sbtn");
 
 function getdonor()
 {
@@ -37,6 +38,29 @@ donate.addEventListener("click",function(){
     {
         if(donor[i].approved=="no")
         createDom(donor[i],i);
+    }
+})
+
+sbtn.addEventListener("click",function(){
+    var sname = document.getElementById("sname").value;
+    if(sname=="")
+    {
+        alert("Enetr value in it");
+    }
+    else
+    {
+        listofDonor.innerHTML="";
+        for(var i=0;i<receiver.length;i++)
+        {
+            if((receiver[i].username==sname || receiver[i].uname==sname) && receiver[i].approved=="no")
+            createDom2(receiver[i],i);
+        }
+
+        for(var j=0;j<donor.length;j++)
+        {
+            if((donor[j].username==sname || donor[j].uname==sname) && donor[j].approved=="no")
+            createDom(donor[j],j);
+        }
     }
 })
 
