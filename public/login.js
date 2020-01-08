@@ -10,7 +10,7 @@ function login()
     {
         if(uname==userArray[i].username && passwrd==userArray[i].password)
             flag=1;
-            else if(uname=="admin" && passwrd=="Admin1234" || (uname=="bloodadmin" && passwrd=="Adminblood"))
+            else if(uname=="admin" && passwrd=="Admin1234" || (uname=="bloodadmin" && passwrd=="Adminblood") || (uname=="expertadmin" && passwrd=="Adminexpert"))
                 flag=2;
     }
     if(flag==2)

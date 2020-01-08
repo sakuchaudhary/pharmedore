@@ -129,6 +129,15 @@ var BloodBank = new Schema({
 })
 var bloodbank = mongoose.model('bloodbanks',BloodBank);
 
+var Ques = new Schema({
+    username:String,
+    qid:Number,
+    question:String,
+    answer:String,
+    answered:String
+})
+var ques = mongoose.model('questions',Ques);
+
 app.get('/',function(req,res)
 {
     res.sendFile(__dirname+'/home.html');
@@ -313,6 +322,69 @@ app.get('/cart.html',(req,res)=>
 {
     res.sendFile(__dirname+'/cart.html');
     console.log("cart");
+})
+
+app.get('/expert.html',(req,res)=>{
+    res.sendFile(__dirname+'/expert.html');
+})
+
+var midFunction3 = (req,res,next)=>
+{
+    console.log("insdie medfxn3");
+    if(req.path==='/adminexpert.html')
+    {
+        res.redirect('/login.html');
+        console.log("redirect login");
+    }
+    else
+    next();
+}
+
+app.get('/adminexpert.html',midFunction3,(req,res)=>{
+    res.sendFile(__dirname+'/adminexpert.html');
+    console.log("adminexpert");
+ })
+ 
+app.post('/addques',(req,res)=>{
+    var len=JSON.parse(req.body.quesList).length;
+    var sData=new ques();
+    sData.username=JSON.parse(req.body.quesList)[len-1].username;
+    sData.qid=JSON.parse(req.body.quesList)[len-1].qid;
+    sData.question=JSON.parse(req.body.quesList)[len-1].question;
+    sData.answer=JSON.parse(req.body.quesList)[len-1].answer;
+    sData.answered=JSON.parse(req.body.quesList)[len-1].answered;
+    sData.save(function(err)
+    {
+    if(err)
+     {
+         console.log("Error");
+     }
+     console.log("Ques saved");
+    });
+})
+
+app.get('/quesarray',(req,res)=>{
+    console.log('running it');
+    ques.find({},function(err,docs){
+        if(err)
+            {
+                console.log("error");
+            }
+        res.send(docs);
+    });
+})
+
+app.post('/quesupdate',(req,res)=>{
+    var ob = JSON.parse(req.body.obj);
+    console.log(ob);
+    var myquery = { username: ob.username,qid:ob.qid };
+  var newvalues = { $set: { answer: ob.answer, answered:ob.answered, para:ob.para} };
+   console.log(ob.grp);
+    ques.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 ques document updated");
+    })
 })
 
 app.post('/deletecartArray',(req,res)=>{
@@ -587,6 +659,11 @@ router.post('/login',(req,res)=>
     {
         req.session.user = 'Adminblood';
         return res.sendFile(__dirname+'/adminblood.html');
+    }
+    if(uname == 'expertadmin' && pswd == 'Adminexpert')
+    {
+        req.session.user = 'Adminexpert';
+        return res.sendFile(__dirname+'/adminexpert.html');
     }
     user.find({username : uname , password : pswd},(err,doc)=>{
         if(err){
