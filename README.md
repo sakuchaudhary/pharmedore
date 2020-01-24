@@ -16,3 +16,5 @@ This is made using :-
 It runs on port 2000 and file is node1.js. Open cmd prompt in that folder and type node node1.js then open the browser and type localhost:2000 
 A webpage will be displayed and then proceed accordingly. To open admin portal(localhost:2000/admin.html), you first need to login using admin as username and Admin1234 (A is capital) as password.
 You cannot directly open admin.html page.
+for blood admin portal(localhost:2000/adminblood.html), you first need to login using bloodadmin as username and Adminblood as password.
+similarly for expert admin portal (localhost:2000/adminexpert.html), you first need to login using expertadmin as username and Adminexpert as password.
