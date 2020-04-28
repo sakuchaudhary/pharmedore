@@ -36,6 +36,19 @@ mongoose.connection.on('connected', (err) => {
   console.log('DB connected');
 });
 mongoose.set('useFindAndModify', false);
+mongoose.set('useNewUrlParser', true);
+
+mediator.once('boot.ready', () => {
+    const options = {};			
+    mongoose.connect(getURL(config), options);
+    mongoose.connection.on('error', (err) => {	
+        mediator.emit('db.error', err);
+    });
+    mongoose.connection.on('connected', () => {	
+        mediator.emit('db.ready', mongoose);
+    });
+});
+
 var Schema=mongoose.Schema;
 
 
