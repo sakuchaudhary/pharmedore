@@ -35,11 +35,7 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('connected', (err) => {
   console.log('DB connected');
 });
-<<<<<<< HEAD
-=======
 mongoose.set('useFindAndModify', false);
-
->>>>>>> 0c55e8b5dcd82e9ea77658868c9a9a88ecff66d1
 var Schema=mongoose.Schema;
 
 
