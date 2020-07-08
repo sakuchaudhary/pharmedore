@@ -26,3 +26,5 @@ You cannot directly open any admin page.
 for blood admin portal(localhost:2000/adminblood.html), you first need to login using bloodadmin as username and Adminblood as password.
 
 similarly for expert admin portal (localhost:2000/adminexpert.html), you first need to login using expertadmin as username and Adminexpert as password.
+
+for forget your password you need to edit node1.js file on line number: 360 and 361 where you have to add your email and password in order to get it work properly.
