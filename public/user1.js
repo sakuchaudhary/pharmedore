@@ -406,8 +406,8 @@ function loginInDisplay()
                 src1=img[i].imageurl;
             }
         }
-            getpic();
-            pic.setAttribute("src",src1);
+            // getpic();
+            // pic.setAttribute("src",src1);
             logout.addEventListener("click",function(event){
             location.href="/";
             logoutfunc();
@@ -415,7 +415,7 @@ function loginInDisplay()
     }
     else
     {
-        pic.setAttribute("style","visibility:hidden");
+       // pic.setAttribute("style","visibility:hidden");
         name.innerHTML = "login";
         logout.innerHTML = "signup";
         login.addEventListener("click",function(event)

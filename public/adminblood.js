@@ -474,6 +474,7 @@ addbb.addEventListener("click",function(){
         }
     }
     addbbdb(newobj);
+    alert("Bloodbank Added in db");
     console.log(newobj);
 })
 

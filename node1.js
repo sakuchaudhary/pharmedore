@@ -35,8 +35,11 @@ mongoose.connection.on('error', (err) => {
 mongoose.connection.on('connected', (err) => {
   console.log('DB connected');
 });
+<<<<<<< HEAD
+=======
 mongoose.set('useFindAndModify', false);
 
+>>>>>>> 0c55e8b5dcd82e9ea77658868c9a9a88ecff66d1
 var Schema=mongoose.Schema;
 
 
@@ -161,9 +164,9 @@ app.post('/api/photo', (req, res) => {
         if (req.fileValidationError) {
             return res.send(req.fileValidationError);
         }
-        else if (!req.file) {
-            return res.send('Please select an image to upload');
-        }
+        // else if (!req.file) {
+        //     return res.send('Please select an image to upload');
+        // }
         else if (err instanceof multer.MulterError) {
             return res.send(err);
         }
@@ -308,6 +311,10 @@ app.get('/blood.html',(req,res)=>{
     res.sendFile(__dirname+'/blood.html');
 })
 
+app.get('/ftpswd.html',(req,res)=>{
+    res.sendFile(__dirname+'/ftpswd.html');
+})
+
 app.get('/admin.html',midFunction,(req,res)=>{
    res.sendFile(__dirname+'/admin.html');
    console.log("admin");
@@ -346,6 +353,72 @@ app.get('/adminexpert.html',midFunction3,(req,res)=>{
     console.log("adminexpert");
  })
  
+ var nodemailer = require("nodemailer");
+ var smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: 'ur email id',
+        pass: 'ur paswd'
+    }
+});
+
+ app.post('/sendmail',(req,res)=>{
+     console.log("kjdkdjddwkhdwdh");
+    var obj = JSON.parse(req.body.obj);
+    var mailOptions={
+        to : obj.email,
+        subject : 'sending email',
+        text : 'helllo '+obj.username+' copy the link to confirm ur passwd localhost:2000/reset/'+obj.username
+    }
+    console.log(mailOptions);
+    smtpTransport.sendMail(mailOptions, function(error, response){
+     if(error){
+            console.log(error);
+        res.end("error");
+     }else{
+            console.log("Message sent: " + response.message);
+        res.end("sent");
+         }
+});
+ })
+
+app.post('/updatepwd',(req,res)=>{
+    var ob=(JSON.parse(req.body.obj));
+      console.log(ob);
+    var myquery = { username: ob.username };
+  var newvalues = { $set: { password:ob.password } };
+   
+    user.updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+        else
+    console.log("1 document updated");
+    });
+})
+
+ var fs=require('fs');
+ app.get('/reset/:name',(req,res)=>{
+     
+    var uname=req.params.name;
+    console.log(uname);
+    fs.readFile('reset.html',(err,data)=>{
+        if(err)
+        {
+           res.writeHead(500);
+           res.end(err);
+           return;
+        }
+        data = data.toString().replace(/\{\{someVal\}\}/, uname);
+        res.writeHead(200);
+        res.end(data, 'utf8');
+       
+    })
+    // res.sendFile(__dirname+'/login.html');
+ })
+
+ app.get('/locate.html',(req,res)=>{
+     res.sendFile(__dirname+'/locate.html');
+ })
+
 app.post('/addques',(req,res)=>{
     var len=JSON.parse(req.body.quesList).length;
     var sData=new ques();
@@ -495,7 +568,6 @@ app.post('/bbupdate',(req,res)=>{
 })
 app.post('/emptycart',(req,res)=>{
     var ob=(JSON.parse(req.body.username));
-    
       cartarray.remove({'username':ob}, function(err){
           if (err){
               throw err;
